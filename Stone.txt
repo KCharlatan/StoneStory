@@ -1,4 +1,3 @@
-//v09271824
 var abItems=［
   ［＂mind＂,＂Mind Stone＂］,
   ［＂dash＂,＂Dashing Shield＂］,
@@ -39,19 +38,11 @@ var scarfFrames = ［
   ＂-._.-.＂,
   ＂._.-._＂,
   ＂_.-._.＂］
-var msp = ui.AddPanel()
-var msb = ui.AddButton()
-var msa = ui.AddAnim(ascii
-,TT,
-│░░│
-`──´
-%%
-,TT,
-│  │
-`──´
-asciiend)
-var mtp = ui.AddPanel()
-var mtb = ui.AddButton()
+var msp
+var msb
+var msa
+var mtp
+var mtb
 // LOCATION
 var locStr
 ? loc.begin
@@ -380,6 +371,7 @@ func Scarf()
 ////////////////////////////////
 //////// MIND STONE
 func DrawMindstoneBtns()
+  msp = ui.AddPanel()
   msp.anchor = top_left
   msp.dock = top_left
   msp.visible = !(loc.isQuest|loc.stars = 0)
@@ -390,6 +382,7 @@ func DrawMindstoneBtns()
   msp.x = 1
   msp.y = 6
 
+  msb = ui.AddButton()
   msb.style = 1
   msb.text = ＂＂
   msb.w = msb.parent.w
@@ -397,9 +390,19 @@ func DrawMindstoneBtns()
   msb.SetPressed(OnMSB)
   msp.Add(msb)
 
+  msa = ui.AddAnim(ascii
+,TT,
+│░░│
+`──´
+%%
+,TT,
+│  │
+`──´
+  asciiend)
   msa.color = #white
   msp.Add(msa)
 
+  mtp = ui.AddPanel()
   mtp.anchor = top_left
   mtp.dock = top_left
   mtp.visible = msp.visible
@@ -410,6 +413,7 @@ func DrawMindstoneBtns()
   mtp.x = 1
   mtp.y = 11
 
+  mtb = ui.AddButton()
   mtb.style = 1
   mtb.text = ＂＂
   mtb.w = mtb.parent.w
