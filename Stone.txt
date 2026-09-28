@@ -1,0 +1,479 @@
+//v09271824
+var abItems=［
+  ［＂mind＂,＂Mind Stone＂］,
+  ［＂dash＂,＂Dashing Shield＂］,
+  ［＂blade＂,＂Blade of the Fallen God＂］,
+  ［＂skeleton_arm＂,＂Skeleton Arm＂］,
+  ［＂mask＂,＂Cultist Mask＂］,
+  ［＂talisman_aether＂,＂Æther Talisman＂］,
+  ［＂bash＂,＂Bashing Shield＂］,
+  ［＂cinderwisp＂,＂Cinderwisp Devour＂］,
+  ［＂talisman_fire＂,＂Fire Talisman＂］,
+  ［＂lollipop_wand＂,＂Lollipop Wand＂］,
+  ［＂voidweaver＂,＂Voidweaver Devour＂］,
+  ［＂wand_aether＂,＂Calamity Wand＂］,
+  ［＂wand_fire＂,＂Explosive Wand＂］,
+  ［＂wand_ice＂,＂Frost Wand＂］,
+  ［＂wand_poison＂,＂Plague Wand＂］,
+  ［＂wand_vigor＂,＂Reset Wand＂］,
+  ［＂wand_stone＂,＂Gravity Wand＂］,
+  ［＂staff_aether＂,＂Grasping Staff＂］,
+  ［＂staff_fire＂,＂Infernal Staff＂］,
+  ［＂staff_ice＂,＂Eternity Staff＂］,
+  ［＂staff_poison＂,＂Berserker Staff＂］,
+  ［＂staff_vigor＂,＂Prevention Staff＂］,
+  ［＂staff_stone＂,＂Acrobatic Staff＂］,
+  ［＂bardiche＂,＂Bardiche＂］,
+  ［＂heavy_hammer＂,＂Heavy Hammer＂］,
+  ［＂quarterstaff＂,＂Quarterstaff＂］,
+  ［＂hatchet＂,＂Hatchet＂］,
+  ［＂shovel＂,＂Shovel＂］］
+var Xyl=［0,0,0, 50,50,50, 33,33,33,33,33,
+^ 33,33,33,33,33, 33,33,33,33,33］
+var Peo =［0,0,0, 0,0,0, 44,44,44,44,44,
+^ 44,44,44,44,44,44,44,44,44,44］
+var PtS =［0,0,0, 124,89,69, 69,69,69,69,69,
+^ 69,69,69,69,69, 69,69,69,69,69］
+var scarfFrames = ［
+  ＂,-._.-＂,
+  ＂-._.-.＂,
+  ＂._.-._＂,
+  ＂_.-._.＂］
+var msp = ui.AddPanel()
+var msb = ui.AddButton()
+var msa = ui.AddAnim(ascii
+,TT,
+│░░│
+`──´
+%%
+,TT,
+│  │
+`──´
+asciiend)
+var mtp = ui.AddPanel()
+var mtb = ui.AddButton()
+// LOCATION
+var locStr
+? loc.begin
+  locStr=＂＂
+  ?loc.stars>0
+    locStr+=loc.stars+＂* ＂
+  locStr+=loc.id
+var lOffset=string.Size(locStr)/-2
+// LOOP RESET
+var usedPotion
+var monte
+// FRAME DATA
+var FID
+var FS
+var FT
+var IL
+var ILS
+var IR
+var IRS
+// FRAME RESET
+var eOffset
+var onCD=［］
+var cdLine
+var cd
+var cdStr
+var sw
+var swRGB
+var pdHead
+var pdL
+var pdR
+var lastL3
+var lastR3
+var rgb
+var fdClr
+var scarfFrame
+// MANUAL VARS
+var usePotions
+var lockGear
+var showRulers
+var scarfColor
+
+StartLoop()
+StartFrame()
+
+usePotions=true
+lockGear=false
+showRulers=false
+scarfColor = #red
+
+////////////////////////////////
+//////// IMPORTS
+import Fishing
+monte=import UI/FreeChestTracker
+
+////////////////////////////////
+//////// FRAME MAIN
+Scarf()
+?monte
+  monte.Main()
+Encounter()
+Location()
+Rulers()
+? loc.stars>0
+  Minimap()
+  Cooldowns()
+  Stopwatch()
+  Potion()
+  Equipment()
+  StoneData()
+  FoeData()
+//////// END
+////////////////////////////////
+
+////////////////////////////////
+//////// ENCOUNTER
+func Encounter()
+  ?encounter.isElite
+    eOffset=string.Size(encounter.eliteMod)/-2
+    >c@eOffset@,11,#68E2FB,@encounter.eliteMod@
+////////////////////////////////
+//////// LOCATION
+func Location()
+  >c@lOffset@,12,@locStr@
+////////////////////////////////
+//////// MINIMAP
+// this is a placeholder
+func Minimap()
+  for i=-16..16
+    >c@i@,13,X
+////////////////////////////////
+//////// COOLDOWNS
+func Cooldowns()
+  onCD.Clear()
+  cdLine=6
+  for abItem:abItems
+    cd=item.GetCooldown(abItem［0］)
+    ? cd>0
+      onCD.Add(abItem［0］)
+      cdStr=time.FormatDigital(cd,true)
+      cdStr=string.Sub(cdStr,2)
+      ?cd<300
+        cdStr=＂ ＂+string.Sub(cdStr,1)
+      >`10,@cdLine@,@cdStr@ @abItem［1］@
+      cdLine++
+////////////////////////////////
+//////// STOPWATCH
+func Stopwatch()
+  ?totaltime<loc.bestTime
+    sw=loc.bestTime-totaltime
+    swRGB=#00FF00
+  :?totaltime<loc.averageTime
+    sw=loc.averageTime-totaltime
+    swRGB=#FFFF00
+  :
+    sw=totaltime-loc.averageTime
+    swRGB=#FF0000
+  sw=time.FormatDigital(sw,true)
+  >`1,23,@swRGB@,@sw@
+////////////////////////////////
+//////// STONEHEAD HUD
+func StoneData()
+  ?IL
+    >`1,26,@pdL@,\
+  >`2,26,@pdHead@,O
+  ?IR
+    >`3,26,@pdR@,/
+////////////////////////////////
+//////// FOE HUD
+func FoeData()
+  >`15,23,@fdClr@,@FS@
+  >`19,23,@fdClr@,@FT@
+  >`25,23,#E0E0E0,@FID@
+////////////////////////////////
+//////// RULERS
+func Rulers()
+  ? showRulers
+    for i=0..90
+      ?i%5=0
+        >`@i@,0,|
+      :
+        >`@i@,0,'
+    for i=0..26
+      >`0,@i@,@i@
+    >o46,0,#FF0000,|
+////////////////////////////////
+
+////////////////////////////////
+//////// POTION
+func Potion()
+  ?usePotions&!usedPotion
+  ^&foe.count>3
+    activate P
+    usedPotion=true
+
+////////////////////////////////
+//////// EQUIPMENT
+func Equipment()
+  ?!lockGear
+    ? !(IRL=2|IRS=2)
+      AttackAnimCancel()
+      EquipmentForLoc()
+      Overrides()
+
+////////////////
+func AttackAnimCancel()
+  ? ILS=3
+    equipL sword 0*
+  ? IRS=3
+    equipR sword 0*
+////////////////
+func EquipmentForLoc()
+  // default set
+  equipL wand dL
+  equipR wand dU
+  ?loc.id=temple|loc.id=nagaraja
+    Temple()
+  :?loc.id=icy_ridge
+    IcyRidge()
+  :?loc.id=bronze_mine|loc.id=bronze_guardian
+    BoilingMines()
+  :?loc.id=undead_crypt
+    HauntedHalls()
+  :?loc.id=fungus_forest
+    MushroomForest()
+  :?loc.id=caustic_caves
+    CavesOfFear()
+  :?loc.id=deadwood_valley
+    DeadwoodCanyon()
+  :?loc.id=rocky_plateau
+    RockyPlateau()
+////////////////
+func Overrides()
+  ? pickup.distance<10
+  ^&foe.GetCount(pickup.distance)=0
+    >c0,0,#FFFF00,STAR POWER!
+    equipL star
+    pdHead=#FFFF00
+  :?!foe&!ai.walking
+    equipL quest
+    equipR compound
+  :?foe.distance>22
+    equipL ouroboros
+    equipR triskelion
+    pdHead=#00FFFF
+    ?!onCD.Contains(＂quarterstaff＂)
+    ^&item.CanActivate()
+      equip quarterstaff
+      activate R
+      >o2,-2,#FFFF00,*HUP*
+
+////////////////
+func MindFreak()
+  ?!onCD.Contains(＂mind＂)
+    equipR mind
+    >o-5,-1,#FF0080,MINDFREAK!
+func Hup()
+  ?!onCD.Contains(＂quarterstaff＂)
+    equip quarter
+
+////////////////
+func Temple()
+  ? foe.id= nagaraja
+    // dodge the brick if in melee
+    // dodge spit somehow
+    >`0,0,#FF0000,No rules set!
+
+////////////////
+func IcyRidge()
+  equipL wand dL
+  equipR fire
+  ? foe.id= yeti
+    // use armor for blow and snow
+    equipR fire
+    ? foe.armor>0
+      equipL socket hammer
+  :?foe.id= ice_wall
+    equipL wand dU
+    equipR fire
+
+////////////////
+func BoilingMines()
+  equipR aether
+  ? foe.id= bronze_guardian
+    // heavy hammer debuff armor gen
+    // armor shred until face pop
+    >`0,0,#FF0000,No rules set!
+
+////////////////
+func HauntedHalls()
+  ? foe.id= skeleton_boss_stage_2
+    // block on 32 through 33, attack on 2
+    equipR broken
+    ?FS=32|33
+      equipR broken
+  :?foe.id= skeleton_boss
+    equipR broken
+    // unmake up to 10*
+    ? FS=32&FT>=PtS［loc.stars］
+      MindFreak()
+
+////////////////
+func MushroomForest()
+  equipR wand dP
+  ? foe.id= mushroom_boss_skinny
+    equipL wand dL
+    equipR compound
+  :?foe.id= mushroom_boss_fat
+    // >o0,4,#0066CC,@foe.distance@
+    // force punch attack you can outrange
+    // get within 5, out to 13+ for 32
+    equipL wand dP
+    equipR tower
+    ? FS=32
+      ? foe.distance<13
+        MindFreak()
+    :
+      ? foe.distance>5|foe.armor>0
+        equipL socket hammer
+  :?foe.id= mushroom_boss
+    // dodge punch, beat armor
+    equipL socket hammer
+    equipR compound
+    ? FS=32
+      MindFreak()
+
+////////////////
+func CavesOfFear()
+  ? foe.id= spider_boss
+    // range 18+, or dodge 133 perf
+    equipR wand dI
+    //? foe.distance<18
+      //MindFreak()
+
+////////////////
+func DeadwoodCanyon()
+  ? foe.id= tree_boss
+    // dodge root attack
+    equipL socket hammer
+    ? foe.distance>7
+      equipR dash
+    ? FS=32&FT>=Xyl［loc.stars］
+      MindFreak()
+  :?foe.id= poena
+    // dont get mirrored, stun lock
+    equipL socket hammer
+    equipR compound
+  :?foe= immune_to_ranged
+    equip socket staff
+
+////////////////
+func RockyPlateau()
+  ? foe.id= dysangelos_bearer
+    >`0,0,#FF0000,No rules set!
+  :?foe.id= dysangelos_elementalist
+    >`0,0,#FF0000,No rules set!
+  :?foe.id= dysangelos_perfected
+    >`0,0,#rainFF,No rules set!
+
+////////////////////////////////
+//////// WAVY SCARF
+func Scarf()
+  scarfFrame=totaltime%(scarfFrames.Count()*3)
+  scarfFrame=math.FloorToInt(scarfFrame/3)
+  >h-6,1,@scarfColor@,@scarfFrames［scarfFrame］@
+
+////////////////////////////////
+//////// MIND STONE
+func DrawMindstoneBtns()
+  msp.anchor = top_left
+  msp.dock = top_left
+  msp.visible = !(loc.isQuest|loc.stars = 0)
+  msp.color = #888888
+  msp.style = 1
+  msp.w = 8
+  msp.h = 5
+  msp.x = 1
+  msp.y = 6
+
+  msb.style = 1
+  msb.text = ＂＂
+  msb.w = msb.parent.w
+  msb.h = msb.parent.h
+  msb.SetPressed(OnMSB)
+  msp.Add(msb)
+
+  msa.color = #white
+  msp.Add(msa)
+
+  mtp.anchor = top_left
+  mtp.dock = top_left
+  mtp.visible = msp.visible
+  mtp.color = msp.color
+  mtp.style = msp.style
+  mtp.w = 8
+  mtp.h = 2
+  mtp.x = 1
+  mtp.y = 11
+
+  mtb.style = 1
+  mtb.text = ＂＂
+  mtb.w = mtb.parent.w
+  mtb.h = mtb.parent.h
+  mtb.SetPressed(OnMTB)
+  mtp.Add(mtb)
+
+func OnMSB()
+  ui.OpenMind()
+
+func OnMTB()
+  msa.frame=1-msa.frame
+
+////////////////////////////////
+//////// INIT
+func StartLoop()
+  ? loc.begin|loc.loop
+    // disable hud pfarbu
+    disable hud r
+    usedPotion=false
+    DrawMindstoneBtns()
+    ?monte
+      monte.Main()
+
+func StartFrame()
+  FID=foe.id
+  FS=foe.state
+  FT=foe.time
+  IL=item.left
+  ILS=item.left.state
+  IR=item.right
+  IRS=item.right.state
+  pdHead=#E0E0E0
+  pdL=StoneState(ILS,lastL3)
+  pdR=StoneState(IRS,lastR3)
+  lastL3=(ILS=3)
+  lastR3=(IRS=3)
+  fdClr=FoeState(FS)
+  
+func StoneState(state,lastState)
+  ? state=2
+    rgb=#0000FF
+  :?state=3&lastState
+    rgb=#FF0000
+  :?state>=4|state<=0
+    rgb=#FF8000
+  :
+    rgb=pdHead
+  return rgb
+
+func FoeState(state)
+  ? state=1
+    rgb=#FFFF00
+  ? state=2
+    rgb=#FF0000
+  :?state=3
+    rgb=#FF8000
+  :?state=4
+    rgb=#00FF00
+  :
+    rgb=#FFFFFF
+  return rgb
+
+/*
+active ability buttons 1-8x1-10,P RL
+pause buttons 23-68x20-25,leave/items
+*/
