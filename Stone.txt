@@ -1,4 +1,6 @@
 >`80,0,#00FFFF,v09282355
+import Scarf
+scarfColor = #red
 var abItems=［
   ［＂mind＂,＂Mind Stone＂］,
   ［＂dash＂,＂Dashing Shield＂］,
@@ -34,11 +36,6 @@ var Peo =［0,0,0, 0,0,0, 44,44,44,44,44,
 ^ 44,44,44,44,44,44,44,44,44,44］
 var PtS =［0,0,0, 124,89,69, 69,69,69,69,69,
 ^ 69,69,69,69,69, 69,69,69,69,69］
-var scarfFrames = ［
-  ＂,-._.-＂,
-  ＂-._.-.＂,
-  ＂._.-._＂,
-  ＂_.-._.＂］
 var msp
 var msb
 var msa
@@ -78,12 +75,10 @@ var lastL3
 var lastR3
 var rgb
 var fdClr
-var scarfFrame
 // MANUAL VARS
 var usePotions
 var lockGear
 var showRulers
-var scarfColor
 
 StartLoop()
 StartFrame()
@@ -91,7 +86,6 @@ StartFrame()
 usePotions=true
 lockGear=false
 showRulers=false
-scarfColor = #red
 
 ////////////////////////////////
 //////// IMPORTS
@@ -100,7 +94,6 @@ monte=import UI/FreeChestTracker
 
 ////////////////////////////////
 //////// FRAME MAIN
-Scarf()
 ?monte
   monte.Main()
 Encounter()
@@ -361,13 +354,6 @@ func RockyPlateau()
     >`0,0,#FF0000,No rules set!
   :?foe.id= dysangelos_perfected
     >`0,0,#rainFF,No rules set!
-
-////////////////////////////////
-//////// WAVY SCARF
-func Scarf()
-  scarfFrame=totaltime%(scarfFrames.Count()*3)
-  scarfFrame=math.FloorToInt(scarfFrame/3)
-  >h-6,1,@scarfColor@,@scarfFrames［scarfFrame］@
 
 ////////////////////////////////
 //////// MIND STONE

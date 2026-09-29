@@ -1,0 +1,15 @@
+////////////////////////////////
+//////// WAVY SCARF
+
+var scarfFrames = ［
+  ＂,-._.-＂,
+  ＂-._.-.＂,
+  ＂._.-._＂,
+  ＂_.-._.＂］
+var scarfFrame
+var scarfColor
+
+scarfFrame=totaltime%(scarfFrames.Count()*3)
+scarfFrame=math.FloorToInt(scarfFrame/3)
+
+>h-6,1,@scarfColor@,@scarfFrames［scarfFrame］@
