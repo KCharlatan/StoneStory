@@ -1,7 +1,4 @@
 >`80,0,#00FFFF,v09282355
-import Scarf
-scarfColor = #red
-import Mindstone
 
 var abItems=［
   ［＂mind＂,＂Mind Stone＂］,
