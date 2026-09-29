@@ -45,7 +45,6 @@ var locStr
 var lOffset=string.Size(locStr)/-2
 // LOOP RESET
 var usedPotion
-var monte
 // FRAME DATA
 var FID
 var FS
@@ -82,14 +81,7 @@ lockGear=false
 showRulers=false
 
 ////////////////////////////////
-//////// IMPORTS
-import Fishing
-monte=import UI/FreeChestTracker
-
-////////////////////////////////
 //////// FRAME MAIN
-?monte
-  monte.Main()
 Encounter()
 Location()
 Rulers()
