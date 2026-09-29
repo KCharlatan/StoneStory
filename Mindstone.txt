@@ -1,0 +1,67 @@
+////////////////////////////////
+//////// MIND STONE
+var msp
+var msb
+var msa
+var mtp
+var mtb
+
+? loc.begin|loc.loop
+  msp = ui.AddPanel()
+  msb = ui.AddButton()
+  msp.Add(msb)
+  msa = ui.AddAnim(ascii
+,TT,
+│░░│
+`──´
+%%
+,TT,
+│  │
+`──´
+asciiend)
+  msp.Add(msa)
+  mtp = ui.AddPanel()
+  mtb = ui.AddButton()
+  mtp.Add(mtb)
+  SetupMS()
+
+func SetupMS()
+  msp.anchor = top_left
+  msp.dock = top_left
+  msp.visible = !(loc.isQuest|loc.stars = 0)
+  msp.color = #888888
+  msp.style = 1
+  msp.w = 8
+  msp.h = 5
+  msp.x = 1
+  msp.y = 6
+
+  msb.style = 1
+  msb.text = ＂＂
+  msb.w = msb.parent.w
+  msb.h = msb.parent.h
+  msb.SetPressed(OnMSB)
+  
+  msa.color = #white
+
+  mtp.anchor = top_left
+  mtp.dock = top_left
+  mtp.visible = msp.visible
+  mtp.color = msp.color
+  mtp.style = msp.style
+  mtp.w = 8
+  mtp.h = 2
+  mtp.x = 1
+  mtp.y = 11
+
+  mtb.style = 1
+  mtb.text = ＂＂
+  mtb.w = mtb.parent.w
+  mtb.h = mtb.parent.h
+  mtb.SetPressed(OnMTB)
+
+func OnMSB()
+  ui.OpenMind()
+
+func OnMTB()
+  msa.frame=1-msa.frame
