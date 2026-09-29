@@ -348,8 +348,6 @@ func StartLoop()
     // disable hud pfarbu
     disable hud r
     usedPotion=false
-    ?monte
-      monte.Main()
 
 func StartFrame()
   FID=foe.id
